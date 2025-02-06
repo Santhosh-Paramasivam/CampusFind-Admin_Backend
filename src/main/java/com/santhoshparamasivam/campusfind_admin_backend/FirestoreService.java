@@ -29,10 +29,12 @@ public class FirestoreService {
     }
 
     void addData() throws ExecutionException, InterruptedException {
-        HashMap<String, Object> documentData = new HashMap<String, Object>();
+        HashMap<String, Object> documentData = new HashMap<>();
         documentData.put("name","Santhosh");
         documentData.put("age",18);
         repository.addData("admin_trial", "3yhNFjL8dIfeZJHxpQBn",documentData);
     }
+
+
 
 }

@@ -9,14 +9,24 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class Controller {
     private final FirestoreService firestoreService;
+    private final FirestoreRepository firestoreRepository;
 
-    Controller(FirestoreService firestoreService) {
+    Controller(FirestoreService firestoreService, FirestoreRepository firestoreRepository) {
         this.firestoreService = firestoreService;
+        this.firestoreRepository = firestoreRepository;
     }
 
     @GetMapping("/")
     String sayHello() throws ExecutionException, InterruptedException {
         firestoreService.addData();
         return "Hello";
+    }
+
+    @GetMapping("/query")
+    String query() throws ExecutionException, InterruptedException {
+
+        firestoreRepository.querySubcollection("abc/def/ghi");
+
+        return "Query completed";
     }
 }

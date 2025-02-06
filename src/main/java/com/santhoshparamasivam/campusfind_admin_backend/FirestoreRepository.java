@@ -2,6 +2,7 @@ package com.santhoshparamasivam.campusfind_admin_backend;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.protobuf.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -36,6 +37,36 @@ public class FirestoreRepository {
         logger.info("Update time : " + future.get().getUpdateTime());
     }
 
+    DocumentReference queryFirstDocument(String collection) throws ExecutionException, InterruptedException {
+        CollectionReference institution_buildings = firestore.collection("institution_buildings");
 
+        DocumentReference document = institution_buildings.listDocuments().iterator().next();
 
+        return document;
+    }
+
+    CollectionReference querySubcollection(String collectionPath) throws ExecutionException, InterruptedException {
+        String[] collectionIdList = collectionPath.split("/");
+        DocumentReference documentReference = null;
+        CollectionReference collectionReference = null;
+        boolean first = true;
+
+        for(String collectionId : collectionIdList)
+        {
+            if(first)
+            {
+                documentReference = queryFirstDocument(collectionId);
+                first = false;
+            }
+            else
+            {
+                collectionReference = documentReference.collection(collectionId);
+                documentReference = collectionReference.listDocuments().iterator().next();
+            }
+
+            logger.info(collectionId);
+        }
+
+        return collectionReference;
+    }
 }
