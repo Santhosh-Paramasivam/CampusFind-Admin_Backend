@@ -32,10 +32,16 @@ public class FirestoreRepository {
         return documents;
     }
 
-    void addData(String collectionName, String documentId, Map<String, Object> docData) throws ExecutionException, InterruptedException {
+    void updateDocumentFromHashMap(String collectionName, String documentId, Map<String, Object> docData) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(docData);
         logger.info("Update time : " + future.get().getUpdateTime());
     }
+
+    void createDocumentFromHashMap(String collectionName, Map<String, Object> docData) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentReference> future = firestore.collection(collectionName).add(docData);
+        logger.info("Add time : " + future.get().get().get().getUpdateTime());
+    }
+
 
     DocumentReference queryFirstDocument(String collection) throws ExecutionException, InterruptedException {
         CollectionReference institution_buildings = firestore.collection(collection);
@@ -83,5 +89,11 @@ public class FirestoreRepository {
         logger.info("deepestReference document" + future.get().toString());
 
         return future.get();
+    }
+
+
+     void createDocumentFromObject(String collectionName,String documentId,InstitutionAdmin admin) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(admin);
+        logger.info("Add time : " + future.get());
     }
 }

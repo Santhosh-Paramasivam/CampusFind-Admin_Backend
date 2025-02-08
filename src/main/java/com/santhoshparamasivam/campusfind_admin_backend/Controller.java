@@ -11,14 +11,14 @@ public class Controller {
     private final FirestoreService firestoreService;
     private final FirestoreRepository firestoreRepository;
 
-    Controller(FirestoreService firestoreService, FirestoreRepository firestoreRepository) {
+    Controller(FirestoreService firestoreService, FirestoreRepository firestoreRepository, FirebaseAuthService firebaseAuthService) {
         this.firestoreService = firestoreService;
         this.firestoreRepository = firestoreRepository;
     }
 
     @GetMapping("/")
     String sayHello() throws ExecutionException, InterruptedException {
-        firestoreService.addData();
+        firestoreService.addInstitutionAdmins();
         return "Hello";
     }
 
@@ -28,5 +28,13 @@ public class Controller {
         firestoreRepository.querySubcollectionDocument("admin_trial/abc/def");
 
         return "Query completed";
+    }
+
+    @GetMapping("/test_auth")
+    String testAuth()
+    {
+        String uid = FirebaseAuthService.verifyIdToken("token");
+
+        return uid;
     }
 }

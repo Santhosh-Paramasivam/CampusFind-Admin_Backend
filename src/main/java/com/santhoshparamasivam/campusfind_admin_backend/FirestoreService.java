@@ -1,5 +1,6 @@
 package com.santhoshparamasivam.campusfind_admin_backend;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -28,14 +30,22 @@ public class FirestoreService {
         logger.info(user.toString());
     }
 
-    void addData() throws ExecutionException, InterruptedException {
+    void updateData() throws ExecutionException, InterruptedException {
         HashMap<String, Object> documentData = new HashMap<>();
         documentData.put("name","Santhosh");
         documentData.put("age",18);
-        repository.addData("admin_trial", "3yhNFjL8dIfeZJHxpQBn",documentData);
+        repository.updateDocumentFromHashMap("admin_trial", "docId",documentData);
     }
 
+    void addInstitutionAdmins() throws ExecutionException, InterruptedException {
+        InstitutionAdmin institutionAdmin = new InstitutionAdmin();
+        institutionAdmin.setId("docId");
+        institutionAdmin.setInstitutionId("Santhosh");
+        institutionAdmin.setEmailId("Santhosh");
+        institutionAdmin.setUsername("Santhosh");
 
+        repository.createDocumentFromObject("institution_admins", "docId", institutionAdmin);
+    }
 
 
 }
