@@ -92,8 +92,13 @@ public class FirestoreRepository {
     }
 
 
-     void createDocumentFromObject(String collectionName,String documentId,InstitutionAdmin admin) throws ExecutionException, InterruptedException {
+    void createDocumentFromObject(String collectionName,String documentId,InstitutionAdmin admin) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(admin);
+        logger.info("Add time : " + future.get());
+    }
+
+    void updateDocumentFromField(String collectionName,String documentId, String field, String value) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).update(field, value);
         logger.info("Add time : " + future.get());
     }
 }

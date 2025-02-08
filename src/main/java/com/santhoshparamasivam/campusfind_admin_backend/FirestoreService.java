@@ -23,7 +23,7 @@ public class FirestoreService {
     }
 
     void getUser(String name) throws ExecutionException, InterruptedException {
-        List<QueryDocumentSnapshot> documents = this.repository.getDocumentsWhere("institution_members","name",name);
+        List<QueryDocumentSnapshot> documents = this.repository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBERS,"name",name);
 
         DocumentSnapshot user = documents.get(0);
 
@@ -37,15 +37,15 @@ public class FirestoreService {
         repository.updateDocumentFromHashMap("admin_trial", "docId",documentData);
     }
 
-    void addInstitutionAdmins() throws ExecutionException, InterruptedException {
-        InstitutionAdmin institutionAdmin = new InstitutionAdmin();
-        institutionAdmin.setId("docId");
-        institutionAdmin.setInstitutionId("Santhosh");
-        institutionAdmin.setEmailId("Santhosh");
-        institutionAdmin.setUsername("Santhosh");
+    void addInstitutionAdmins(String documentId, String institutionId, String emailId, String username) throws ExecutionException, InterruptedException {
+        InstitutionAdmin institutionAdmin = new InstitutionAdmin(documentId, emailId, institutionId, username);
 
-        repository.createDocumentFromObject("institution_admins", "docId", institutionAdmin);
+        repository.createDocumentFromObject(FirestoreCollections.INSTITUTION_ADMINS, documentId, institutionAdmin);
     }
 
+    void updateInstitutionAdmins(String documentId, String institutionId, String emailId, String username) throws ExecutionException, InterruptedException {
+        InstitutionAdmin institutionAdmin = new InstitutionAdmin(documentId, emailId, institutionId, username);
 
+        repository.updateDocumentFromField(FirestoreCollections.INSTITUTION_ADMINS, documentId, "institutionId", "12345");
+    }
 }

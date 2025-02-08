@@ -9,7 +9,15 @@ public class InstitutionAdmin {
     private String institutionId;
     private String username;
 
+
     public InstitutionAdmin(){}
+
+    public InstitutionAdmin(String id, String emailId, String institutionId, String username){
+        this.id = id;
+        this.emailId = emailId;
+        this.institutionId = institutionId;
+        this.username = username;
+    }
 
     public void setId(String id) {
         this.id = id;
