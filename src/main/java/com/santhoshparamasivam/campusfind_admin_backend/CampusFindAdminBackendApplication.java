@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CampusFindAdminBackendApplication {
-
-
 	public static void main(String[] args)
 	{
 		SpringApplication.run(CampusFindAdminBackendApplication.class, args);

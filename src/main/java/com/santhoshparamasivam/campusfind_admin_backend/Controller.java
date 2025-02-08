@@ -25,7 +25,7 @@ public class Controller {
     @GetMapping("/query")
     String query() throws ExecutionException, InterruptedException {
 
-        firestoreRepository.querySubcollection("abc/def/ghi");
+        firestoreRepository.querySubcollectionDocument("admin_trial/abc/def");
 
         return "Query completed";
     }

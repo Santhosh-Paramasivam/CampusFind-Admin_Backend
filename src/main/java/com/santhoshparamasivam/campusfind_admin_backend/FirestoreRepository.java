@@ -38,14 +38,14 @@ public class FirestoreRepository {
     }
 
     DocumentReference queryFirstDocument(String collection) throws ExecutionException, InterruptedException {
-        CollectionReference institution_buildings = firestore.collection("institution_buildings");
+        CollectionReference institution_buildings = firestore.collection(collection);
 
         DocumentReference document = institution_buildings.listDocuments().iterator().next();
 
         return document;
     }
 
-    CollectionReference querySubcollection(String collectionPath) throws ExecutionException, InterruptedException {
+    CollectionReference querySubcollectionIteratively(String collectionPath) throws ExecutionException, InterruptedException {
         String[] collectionIdList = collectionPath.split("/");
         DocumentReference documentReference = null;
         CollectionReference collectionReference = null;
@@ -60,13 +60,28 @@ public class FirestoreRepository {
             }
             else
             {
+
                 collectionReference = documentReference.collection(collectionId);
                 documentReference = collectionReference.listDocuments().iterator().next();
             }
 
             logger.info(collectionId);
+            logger.info(documentReference.getId());
         }
 
         return collectionReference;
+    }
+
+    DocumentSnapshot querySubcollectionDocument(String collectionPath) throws ExecutionException, InterruptedException {
+        CollectionReference deepestReference = querySubcollectionIteratively(collectionPath);
+
+
+        DocumentReference document = deepestReference.listDocuments().iterator().next();
+
+        ApiFuture<DocumentSnapshot> future = document.get();
+
+        logger.info("deepestReference document" + future.get().toString());
+
+        return future.get();
     }
 }
