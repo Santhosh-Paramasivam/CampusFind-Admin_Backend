@@ -4,4 +4,5 @@ public class FirestoreCollections {
     public static final String INSTITUTION_ADMINS = "institution_admins";
 
     public static final String INSTITUTION_MEMBERS = "institution_members";
+    public static final String INSTITUTIONS = "institutions";
 }

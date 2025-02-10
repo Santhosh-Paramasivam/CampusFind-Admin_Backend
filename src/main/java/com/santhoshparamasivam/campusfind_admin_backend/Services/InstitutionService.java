@@ -1,0 +1,24 @@
+package com.santhoshparamasivam.campusfind_admin_backend.Services;
+
+import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.Models.Institution;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ExecutionException;
+
+@Service
+public class InstitutionService {
+    private final FirestoreRepository firestoreRepository;
+
+    public InstitutionService(FirestoreRepository firestoreRepository){
+        this.firestoreRepository = firestoreRepository;
+    };
+
+
+    public void createInstitution(String institutionName, String type, String contactEmail, String location, String address) throws ExecutionException, InterruptedException {
+        Institution institution = new Institution(contactEmail, type, institutionName, location, address);
+
+        firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTIONS, institution);
+    }
+}

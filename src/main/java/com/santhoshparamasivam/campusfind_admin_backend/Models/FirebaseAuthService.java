@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.Models;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
@@ -14,13 +14,18 @@ public class FirebaseAuthService {
         this.firebaseAuth = firebaseAuth;
     }
 
-    void createUser(String email, String password) throws FirebaseAuthException {
+    public String createUser(String email, String password) throws FirebaseAuthException {
+        System.out.printf("email : " + email);
+        System.out.printf("password : " + password);
+
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(email)
                 .setPassword(password);
 
         UserRecord userRecord = firebaseAuth.createUser(request);
         System.out.println("Successfully created new user: " + userRecord.getUid());
+
+        return userRecord.getUid();
     }
 
     public static String verifyIdToken(String idToken) {

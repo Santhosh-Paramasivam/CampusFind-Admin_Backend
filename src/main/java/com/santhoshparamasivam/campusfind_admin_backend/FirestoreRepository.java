@@ -19,31 +19,31 @@ public class FirestoreRepository {
     private final Logger logger = LoggerFactory.getLogger(FirestoreRepository.class);
     private final Firestore firestore;
 
-    FirestoreRepository(Firestore firestore)
+    public FirestoreRepository(Firestore firestore)
     {
         this.firestore = firestore;
 
     }
 
-    List<QueryDocumentSnapshot> getDocumentsWhere(String collectionId, String field, String value) throws ExecutionException, InterruptedException {
+    public List<QueryDocumentSnapshot> getDocumentsWhere(String collectionId, String field, String value) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = firestore.collection(collectionId).whereEqualTo(field,value).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
         return documents;
     }
 
-    void updateDocumentFromHashMap(String collectionName, String documentId, Map<String, Object> docData) throws ExecutionException, InterruptedException {
+    public void updateDocumentFromHashMap(String collectionName, String documentId, Map<String, Object> docData) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(docData);
         logger.info("Update time : " + future.get().getUpdateTime());
     }
 
-    void createDocumentFromHashMap(String collectionName, Map<String, Object> docData) throws ExecutionException, InterruptedException {
+    public void createDocumentFromHashMap(String collectionName, Map<String, Object> docData) throws ExecutionException, InterruptedException {
         ApiFuture<DocumentReference> future = firestore.collection(collectionName).add(docData);
         logger.info("Add time : " + future.get().get().get().getUpdateTime());
     }
 
 
-    DocumentReference queryFirstDocument(String collection) throws ExecutionException, InterruptedException {
+    public DocumentReference queryFirstDocument(String collection) throws ExecutionException, InterruptedException {
         CollectionReference institution_buildings = firestore.collection(collection);
 
         DocumentReference document = institution_buildings.listDocuments().iterator().next();
@@ -51,7 +51,7 @@ public class FirestoreRepository {
         return document;
     }
 
-    CollectionReference querySubcollectionIteratively(String collectionPath) throws ExecutionException, InterruptedException {
+    public CollectionReference querySubcollectionIteratively(String collectionPath) throws ExecutionException, InterruptedException {
         String[] collectionIdList = collectionPath.split("/");
         DocumentReference documentReference = null;
         CollectionReference collectionReference = null;
@@ -78,7 +78,7 @@ public class FirestoreRepository {
         return collectionReference;
     }
 
-    DocumentSnapshot querySubcollectionDocument(String collectionPath) throws ExecutionException, InterruptedException {
+    public DocumentSnapshot querySubcollectionDocument(String collectionPath) throws ExecutionException, InterruptedException {
         CollectionReference deepestReference = querySubcollectionIteratively(collectionPath);
 
 
@@ -92,12 +92,17 @@ public class FirestoreRepository {
     }
 
 
-    void createDocumentFromObject(String collectionName,String documentId,InstitutionAdmin admin) throws ExecutionException, InterruptedException {
-        ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(admin);
+    public void createDocumentFromObjectAndDocumentId(String collectionName,String documentId,Object object) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).set(object);
         logger.info("Add time : " + future.get());
     }
 
-    void updateDocumentFromField(String collectionName,String documentId, String field, String value) throws ExecutionException, InterruptedException {
+    public void createDocumentFromObject(String collectionName,Object object) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentReference> future = firestore.collection(collectionName).add(object);
+        logger.info("Add time : " + future.get());
+    }
+
+    public void updateDocumentFromField(String collectionName,String documentId, String field, String value) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).update(field, value);
         logger.info("Add time : " + future.get());
     }
