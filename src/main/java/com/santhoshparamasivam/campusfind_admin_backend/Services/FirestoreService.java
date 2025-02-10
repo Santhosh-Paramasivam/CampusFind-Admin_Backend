@@ -44,9 +44,7 @@ public class FirestoreService {
         repository.createDocumentFromObjectAndDocumentId(FirestoreCollections.INSTITUTION_ADMINS, documentId, institutionAdmin);
     }
 
-    public void updateInstitutionAdmins(String documentId, String institutionId, String emailId, String username) throws ExecutionException, InterruptedException {
-        InstitutionAdmin institutionAdmin = new InstitutionAdmin(documentId, emailId, institutionId, username);
-
+    public void updateInstitutionAdmins(String documentId, String field, String value) throws ExecutionException, InterruptedException {
         repository.updateDocumentFromField(FirestoreCollections.INSTITUTION_ADMINS, documentId, "institutionId", "");
     }
 

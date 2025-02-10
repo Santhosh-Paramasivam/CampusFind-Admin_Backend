@@ -1,9 +1,11 @@
 package com.santhoshparamasivam.campusfind_admin_backend;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.santhoshparamasivam.campusfind_admin_backend.Models.FirebaseAuthService;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.InstitutionService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,24 @@ public class Controller {
         this.firebaseAuthService = firebaseAuthService;
         this.institutionService = institutionService;
     }
+
+    @PostMapping("/protected")
+    public String protectedEndpoint(HttpServletRequest request) {
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return "Missing or invalid Authorization header";
+            }
+
+            String token = authHeader.substring(7);
+            String uid = FirebaseAuthService.verifyIdToken(token);
+
+            return "Hello, user " + uid + "! You are authenticated.";
+        } catch (Exception e) {
+            return "Unauthorized: " + e.getMessage();
+        }
+    }
+
 
     @GetMapping("/")
     String root() throws ExecutionException, InterruptedException {
