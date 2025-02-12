@@ -1,37 +1,38 @@
 package com.santhoshparamasivam.campusfind_admin_backend;
 
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import com.santhoshparamasivam.campusfind_admin_backend.Models.FirebaseAuthService;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.InstitutionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class Controller {
     private final FirestoreService firestoreService;
-    private final FirestoreRepository firestoreRepository;
 
     private final InstitutionService institutionService;
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final FirebaseAuthService firebaseAuthService;
-    Controller(FirestoreService firestoreService, FirestoreRepository firestoreRepository, FirebaseAuthService firebaseAuthService, InstitutionService institutionService) {
+    Controller(FirestoreService firestoreService, FirebaseAuthService firebaseAuthService, InstitutionService institutionService) {
         this.firestoreService = firestoreService;
-        this.firestoreRepository = firestoreRepository;
         this.firebaseAuthService = firebaseAuthService;
         this.institutionService = institutionService;
     }
 
     @PostMapping("/protected")
-    public String protectedEndpoint(HttpServletRequest request) {
+    public String protectedEndpoint(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
         try {
-            String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 return "Missing or invalid Authorization header";
             }
@@ -45,43 +46,18 @@ public class Controller {
         }
     }
 
-
-    @GetMapping("/")
-    String root() throws ExecutionException, InterruptedException {
-        return "Hello";
-    }
-
-    @GetMapping("/updateTest")
-    String updateTest() {
-        return "Hello";
-    }
-
-    @GetMapping("/query")
-    String query() throws ExecutionException, InterruptedException {
-
-        firestoreRepository.querySubcollectionDocument("admin_trial/abc/def");
-
-        return "Query completed";
+    @PostMapping("/schema")
+    public void addSchema() throws ExecutionException, InterruptedException {
+        this.firestoreService.addMemberSchema();
     }
 
     @PostMapping("/register_user")
-    void registerUser(@RequestParam(required = false) String email,@RequestParam(required = false) String username, @RequestParam(required = false) String password) throws FirebaseAuthException, ExecutionException, InterruptedException {
-        logger.info("email : " + email);
-        logger.info("username : " + username);
-        logger.info("password : " + password);
+    public ResponseEntity<Map<String, Object>> registerUser(
+            @RequestParam String email,
+            @RequestParam String username,
+            @RequestParam String password) {
 
-        String uid = null;
-        try
-        {
-            uid = firebaseAuthService.createUser(email, password);
-        }
-        catch (FirebaseAuthException e)
-        {
-            logger.info(e.toString());
-            return;
-        }
-
-        firestoreService.addInstitutionAdmins(uid, null, email, username);
+        return firebaseAuthService.registerUser(email, username, password);
     }
 
     @PostMapping("/register_institution")
