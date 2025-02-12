@@ -97,13 +97,22 @@ public class FirestoreRepository {
         logger.info("Add time : " + future.get());
     }
 
-    public void createDocumentFromObject(String collectionName,Object object) throws ExecutionException, InterruptedException {
+    public String createDocumentFromObject(String collectionName,Object object) throws ExecutionException, InterruptedException {
         ApiFuture<DocumentReference> future = firestore.collection(collectionName).add(object);
         logger.info("Add time : " + future.get());
+
+        return future.get().getId();
     }
 
     public void updateDocumentFromField(String collectionName,String documentId, String field, String value) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> future = firestore.collection(collectionName).document(documentId).update(field, value);
         logger.info("Add time : " + future.get());
+    }
+
+    public DocumentSnapshot queryByDocumentId(String collectionName, String documentId) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> documentSnapshotApiFuture = firestore.collection(collectionName).document(documentId).get();
+
+        return documentSnapshotApiFuture.get();
+
     }
 }

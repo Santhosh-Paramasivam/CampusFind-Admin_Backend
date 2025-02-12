@@ -16,9 +16,11 @@ public class InstitutionService {
     };
 
 
-    public void createInstitution(String institutionName, String type, String contactEmail, String location, String address) throws ExecutionException, InterruptedException {
+    public void createInstitution(String adminUid,String institutionName, String type, String contactEmail, String location, String address) throws ExecutionException, InterruptedException {
         Institution institution = new Institution(contactEmail, type, institutionName, location, address);
 
-        firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTIONS, institution);
+        String institutionDocId = firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTIONS, institution);
+
+        firestoreRepository.updateDocumentFromField(FirestoreCollections.INSTITUTION_ADMINS,adminUid,"institution_id",institutionDocId);
     }
 }

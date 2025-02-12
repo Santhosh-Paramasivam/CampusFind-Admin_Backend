@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Models;
+package com.santhoshparamasivam.campusfind_admin_backend.Services;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
@@ -38,7 +38,38 @@ public class FirebaseAuthService {
         return userRecord.getUid();
     }
 
-    public static String verifyIdToken(String idToken) {
+//    String uid;
+//        try {
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//            throw new ServerException("auth-token-missing","JWT token for authentication not found in request header", HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        String token = authHeader.substring(7);
+//        uid = FirebaseAuthService.verifyIdToken(token);
+//
+//        return firestoreService.getMemberSchemaFromAdminUid(uid);
+//    } catch (Exception e) {
+//        throw new ServerException("generic error","generic message", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+
+    public String extractAndVerifyIdToken(String authHeader) {
+        String uid;
+        try {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ServerException("auth-token-missing","JWT token for authentication not found in request header", HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+        uid = verifyIdToken(token);
+
+        return uid;
+    } catch (Exception e) {
+            //To be improved
+            throw new ServerException("generic error","generic message", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public String verifyIdToken(String idToken) {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
             String uid = decodedToken.getUid();
@@ -50,7 +81,7 @@ public class FirebaseAuthService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> registerUser(String email, String username, String password) {
+    public ResponseEntity<Map<String, Object>> registerAdmin(String email, String username, String password) {
         Map<String, Object> response = new HashMap<>();
 
         try {

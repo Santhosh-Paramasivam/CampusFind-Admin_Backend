@@ -43,4 +43,10 @@ public class InstitutionMemberSchema {
     public Map<String, Map<String, String>> getSchema() {
         return schema;
     }
+
+    @Override
+    public String toString()
+    {
+        return "id : " + id + " institution_id : " + institutionId + " schema : " + schema;
+    }
 }

@@ -1,6 +1,7 @@
 package com.santhoshparamasivam.campusfind_admin_backend.Services;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
 import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
@@ -68,5 +69,24 @@ public class FirestoreService {
         this.repository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
     }
 
+    public String getInstitutionIdFromAdminUid(String uid) throws ExecutionException, InterruptedException {
+        DocumentSnapshot documentSnapshot =  repository.queryByDocumentId(FirestoreCollections.INSTITUTION_ADMINS, uid);
+
+        return documentSnapshot.getString("institution_id");
+    }
+
+    public InstitutionMemberSchema getMemberSchemaFromAdminUid(String uid) throws ExecutionException, InterruptedException {
+        String institutionId = getInstitutionIdFromAdminUid(uid);
+
+        List<QueryDocumentSnapshot> queryDocumentSnapshotList = repository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, "institution_id", "12345");
+
+        QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshotList.get(0);
+
+
+        InstitutionMemberSchema institutionMemberSchema =  queryDocumentSnapshot.toObject(InstitutionMemberSchema.class);
+        logger.info(institutionMemberSchema.toString());
+
+        return institutionMemberSchema;
+    }
 
 }

@@ -1,10 +1,9 @@
 package com.santhoshparamasivam.campusfind_admin_backend;
 
-import com.google.firebase.auth.FirebaseAuthException;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.FirebaseAuthService;
+import com.santhoshparamasivam.campusfind_admin_backend.Services.FirebaseAuthService;
+import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.InstitutionService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -29,21 +28,18 @@ public class Controller {
         this.institutionService = institutionService;
     }
 
+    @GetMapping("/hello")
+    public String sayHello()
+    {
+        logger.info("info");
+        logger.debug("debug");
+        logger.warn("warn");
+        return "Hello";
+    }
+
     @PostMapping("/protected")
     public String protectedEndpoint(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-
-        try {
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                return "Missing or invalid Authorization header";
-            }
-
-            String token = authHeader.substring(7);
-            String uid = FirebaseAuthService.verifyIdToken(token);
-
-            return "Hello, user " + uid + "! You are authenticated.";
-        } catch (Exception e) {
-            return "Unauthorized: " + e.getMessage();
-        }
+        return "User logged in" + firebaseAuthService.extractAndVerifyIdToken(authHeader);
     }
 
     @PostMapping("/schema")
@@ -51,20 +47,26 @@ public class Controller {
         this.firestoreService.addMemberSchema();
     }
 
-    @PostMapping("/register_user")
+    @PostMapping("/register_admin")
     public ResponseEntity<Map<String, Object>> registerUser(
             @RequestParam String email,
             @RequestParam String username,
             @RequestParam String password) {
 
-        return firebaseAuthService.registerUser(email, username, password);
+        return firebaseAuthService.registerAdmin(email, username, password);
     }
 
     @PostMapping("/register_institution")
-    void registerInstitution(@RequestParam String institutionName, @RequestParam String type,@RequestParam String contactEmail, @RequestParam String location,@RequestParam String address) throws ExecutionException, InterruptedException {
-        institutionService.createInstitution(institutionName, type, contactEmail, location ,address);
+    void registerInstitution(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader, @RequestParam String institutionName, @RequestParam String type,@RequestParam String contactEmail, @RequestParam String location,@RequestParam String address) throws ExecutionException, InterruptedException {
+        String adminUid = firebaseAuthService.extractAndVerifyIdToken(authHeader);
+
+        institutionService.createInstitution(adminUid, institutionName, type, contactEmail, location ,address);
     }
 
-
+    @GetMapping("/institution_member_schema")
+    InstitutionMemberSchema getInstitutionSchema(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws ExecutionException, InterruptedException {
+       String uid = firebaseAuthService.extractAndVerifyIdToken(authHeader);
+       return firestoreService.getMemberSchemaFromAdminUid(uid);
+    }
 
 }
