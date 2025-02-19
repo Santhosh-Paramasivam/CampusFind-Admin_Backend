@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.santhoshparamasivam.campusfind_admin_backend.ServerException;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FirebaseAuthService {
 
-    private FirebaseAuth firebaseAuth;
-    private FirestoreService firestoreService;
-    FirebaseAuthService(FirebaseAuth firebaseAuth, FirestoreService firestoreService) {
+    private final FirebaseAuth firebaseAuth;
+    private final AdminService adminService;
+    FirebaseAuthService(FirebaseAuth firebaseAuth, FirestoreService firestoreService, AdminService adminService) {
         this.firebaseAuth = firebaseAuth;
-        this.firestoreService = firestoreService;
+        this.adminService = adminService;
     }
 
     public String createUser(String email, String password) throws FirebaseAuthException {
@@ -37,20 +38,6 @@ public class FirebaseAuthService {
 
         return userRecord.getUid();
     }
-
-//    String uid;
-//        try {
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            throw new ServerException("auth-token-missing","JWT token for authentication not found in request header", HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        String token = authHeader.substring(7);
-//        uid = FirebaseAuthService.verifyIdToken(token);
-//
-//        return firestoreService.getMemberSchemaFromAdminUid(uid);
-//    } catch (Exception e) {
-//        throw new ServerException("generic error","generic message", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
     public String extractAndVerifyIdToken(String authHeader) {
         String uid;
@@ -90,7 +77,7 @@ public class FirebaseAuthService {
                 throw new ServerException("firebase-auth-error", "Email or Password is malformed", HttpStatus.BAD_REQUEST);
             }
 
-            firestoreService.addInstitutionAdmins(uid, null, email, username);
+            adminService.addInstitutionAdmins(uid, null, email, username);
 
             response.put("message", "User registered successfully");
             response.put("uid", uid);

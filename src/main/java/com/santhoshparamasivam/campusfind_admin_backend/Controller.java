@@ -1,9 +1,7 @@
 package com.santhoshparamasivam.campusfind_admin_backend;
 
-import com.santhoshparamasivam.campusfind_admin_backend.Services.FirebaseAuthService;
+import com.santhoshparamasivam.campusfind_admin_backend.Services.*;
 import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
-import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
-import com.santhoshparamasivam.campusfind_admin_backend.Services.InstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,15 +15,15 @@ import java.util.concurrent.ExecutionException;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class Controller {
-    private final FirestoreService firestoreService;
 
     private final InstitutionService institutionService;
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final FirebaseAuthService firebaseAuthService;
-    Controller(FirestoreService firestoreService, FirebaseAuthService firebaseAuthService, InstitutionService institutionService) {
-        this.firestoreService = firestoreService;
+    private final InstitutionSchemaService institutionMemberSchemaService;
+    Controller(FirestoreService firestoreService, FirebaseAuthService firebaseAuthService, InstitutionService institutionService, AdminService adminService, InstitutionSchemaService institutionMemberSchemaService) {
         this.firebaseAuthService = firebaseAuthService;
         this.institutionService = institutionService;
+        this.institutionMemberSchemaService = institutionMemberSchemaService;
     }
 
     @GetMapping("/hello")
@@ -44,7 +42,7 @@ public class Controller {
 
     @PostMapping("/schema")
     public void addSchema() throws ExecutionException, InterruptedException {
-        this.firestoreService.addMemberSchema();
+        institutionMemberSchemaService.addMemberSchema();
     }
 
     @PostMapping("/register_admin")
@@ -66,7 +64,7 @@ public class Controller {
     @GetMapping("/institution_member_schema")
     InstitutionMemberSchema getInstitutionSchema(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws ExecutionException, InterruptedException {
        String uid = firebaseAuthService.extractAndVerifyIdToken(authHeader);
-       return firestoreService.getMemberSchemaFromAdminUid(uid);
+       return institutionMemberSchemaService.getMemberSchemaFromAdminUid(uid);
     }
 
 }
