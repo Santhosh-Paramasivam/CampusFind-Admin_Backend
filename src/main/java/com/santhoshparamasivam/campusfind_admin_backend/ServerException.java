@@ -20,6 +20,7 @@ public class ServerException extends RuntimeException {
         this.errorCode = errorCode;
         this.status = HttpStatus.valueOf(statusCode);
     }
+
     public HttpStatus getStatus() {
         return status;
     }

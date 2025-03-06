@@ -1,11 +1,10 @@
 package com.santhoshparamasivam.campusfind_admin_backend.Services;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.*;
 import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionAdmin;
-import com.santhoshparamasivam.campusfind_admin_backend.ServerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,28 +39,25 @@ public class AdminService {
     }
 
     public ResponseEntity<Map<String, Object>> registerAdmin(String email, String username, String password) {
-        Map<String, Object> response = new HashMap<>();
+        HashMap<String, Object> response = new HashMap<>();
 
         try {
             String uid = firebaseAuthService.createUser(email, password);
             if (uid == null) {
-                throw new ServerException("firebase-auth-error", "Email or Password is malformed", HttpStatus.BAD_REQUEST);
+                throw new ServerException(ServerErrorCodes.FIREBASE_AUTH_ERROR, "Email or Password is malformed", HttpStatus.BAD_REQUEST);
             }
 
             addInstitutionAdmins(uid, null, email, username);
 
-            response.put("message", "User registered successfully");
             response.put("uid", uid);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+            return ServerResponse.respond(ServerResponseCodes.USER_REGISTERED,ServerResponseCodes.RESPONSE_MAP.get(ServerResponseCodes.USER_REGISTERED), HttpStatus.CREATED, response);
         }
         catch(FirebaseAuthException e){
-            throw new ServerException("firebase-auth",e.getMessage(),e.getHttpResponse().getStatusCode());
+            throw new ServerException(ServerErrorCodes.FIREBASE_AUTH_ERROR,e.getMessage(),e.getHttpResponse().getStatusCode());
         }
         catch (ExecutionException | InterruptedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                    "error", "firebase-auth-error",
-                    "message", e.getMessage()
-            ));
+            throw new ServerException(ServerErrorCodes.INTERNAL_SERVER_ERROR,ServerErrorCodes.ERROR_MAP.get(ServerErrorCodes.INTERNAL_SERVER_ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
