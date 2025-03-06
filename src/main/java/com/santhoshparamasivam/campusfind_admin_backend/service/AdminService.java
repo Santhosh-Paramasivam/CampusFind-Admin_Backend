@@ -1,10 +1,14 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.santhoshparamasivam.campusfind_admin_backend.*;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionAdmin;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionAdmin;
+import com.santhoshparamasivam.campusfind_admin_backend.exception.ServerErrorCodes;
+import com.santhoshparamasivam.campusfind_admin_backend.exception.ServerException;
+import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.ServerResponse;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.ServerResponseCodes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionMemberSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

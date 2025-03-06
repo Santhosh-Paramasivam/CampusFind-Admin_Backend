@@ -1,23 +1,15 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import com.santhoshparamasivam.campusfind_admin_backend.ServerErrorCodes;
-import com.santhoshparamasivam.campusfind_admin_backend.ServerException;
-import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
-import io.grpc.Server;
+import com.santhoshparamasivam.campusfind_admin_backend.exception.ServerErrorCodes;
+import com.santhoshparamasivam.campusfind_admin_backend.exception.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class FirebaseAuthService {

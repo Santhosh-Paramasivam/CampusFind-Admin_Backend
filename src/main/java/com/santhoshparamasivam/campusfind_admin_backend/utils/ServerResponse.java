@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.utils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

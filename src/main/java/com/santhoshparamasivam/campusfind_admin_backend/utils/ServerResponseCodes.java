@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.utils;
 
 import java.util.HashMap;
 

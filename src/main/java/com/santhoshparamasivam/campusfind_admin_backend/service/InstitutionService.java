@@ -1,8 +1,8 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.Institution;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.model.Institution;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;

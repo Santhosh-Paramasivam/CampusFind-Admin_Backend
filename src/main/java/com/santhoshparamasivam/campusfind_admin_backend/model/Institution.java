@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Models;
+package com.santhoshparamasivam.campusfind_admin_backend.model;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.PropertyName;

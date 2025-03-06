@@ -1,12 +1,10 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.controller;
 
-import com.santhoshparamasivam.campusfind_admin_backend.Services.*;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
+import com.santhoshparamasivam.campusfind_admin_backend.service.*;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionMemberSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
