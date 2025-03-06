@@ -1,9 +1,9 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionMemberSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,4 +54,23 @@ public class InstitutionSchemaService {
 
         this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
     }
+
+//    public void updateMemberSchema(InstitutionMemberSchema institutionMemberSchema, ) throws ExecutionException, InterruptedException {
+//        InstitutionMemberSchema institutionMemberSchema = new InstitutionMemberSchema();
+//        Map<String, Map<String,String>> schema = new HashMap<>();
+//
+//        Map<String, String> professor = new HashMap<>();
+//        professor.put("Faculty Id","string");
+//        Map<String, String> student = new HashMap<>();
+//        student.put("Register Id","string");
+//
+//        schema.put("Professor",professor);
+//        schema.put("Student",student);
+//
+//        institutionMemberSchema.setInstitutionId("");
+//        institutionMemberSchema.setSchema(schema);
+//
+//        this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
+//    }
+
 }

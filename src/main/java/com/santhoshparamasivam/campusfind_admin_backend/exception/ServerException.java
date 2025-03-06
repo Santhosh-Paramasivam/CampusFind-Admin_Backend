@@ -1,8 +1,7 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.exception;
 
 
 import org.springframework.http.HttpStatus;
-
 
 public class ServerException extends RuntimeException {
     private final HttpStatus status;
@@ -21,6 +20,7 @@ public class ServerException extends RuntimeException {
         this.errorCode = errorCode;
         this.status = HttpStatus.valueOf(statusCode);
     }
+
     public HttpStatus getStatus() {
         return status;
     }

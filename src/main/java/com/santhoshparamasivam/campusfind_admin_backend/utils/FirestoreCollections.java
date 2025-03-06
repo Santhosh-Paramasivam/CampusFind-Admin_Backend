@@ -1,4 +1,4 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.utils;
 
 public class FirestoreCollections {
     public static final String INSTITUTION_ADMINS = "institution_admins";

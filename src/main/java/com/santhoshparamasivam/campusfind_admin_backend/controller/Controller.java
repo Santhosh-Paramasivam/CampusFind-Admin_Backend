@@ -1,11 +1,10 @@
-package com.santhoshparamasivam.campusfind_admin_backend;
+package com.santhoshparamasivam.campusfind_admin_backend.controller;
 
-import com.santhoshparamasivam.campusfind_admin_backend.Services.*;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
+import com.santhoshparamasivam.campusfind_admin_backend.service.*;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionMemberSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +19,11 @@ public class Controller {
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final FirebaseAuthService firebaseAuthService;
     private final InstitutionSchemaService institutionMemberSchemaService;
-    Controller(FirestoreService firestoreService, FirebaseAuthService firebaseAuthService, InstitutionService institutionService, AdminService adminService, InstitutionSchemaService institutionMemberSchemaService) {
+    private final AdminService adminService;
+    Controller(FirebaseAuthService firebaseAuthService, InstitutionService institutionService, AdminService adminService, InstitutionSchemaService institutionMemberSchemaService) {
         this.firebaseAuthService = firebaseAuthService;
         this.institutionService = institutionService;
+        this.adminService = adminService;
         this.institutionMemberSchemaService = institutionMemberSchemaService;
     }
 
@@ -49,9 +50,9 @@ public class Controller {
     public ResponseEntity<Map<String, Object>> registerUser(
             @RequestParam String email,
             @RequestParam String username,
-            @RequestParam String password) {
+            @RequestParam String password) throws ExecutionException, InterruptedException {
 
-        return firebaseAuthService.registerAdmin(email, username, password);
+        return adminService.registerAdmin(email, username, password);
     }
 
     @PostMapping("/register_institution")

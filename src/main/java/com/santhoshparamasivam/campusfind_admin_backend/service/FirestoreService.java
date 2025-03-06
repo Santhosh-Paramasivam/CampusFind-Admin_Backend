@@ -1,19 +1,15 @@
-package com.santhoshparamasivam.campusfind_admin_backend.Services;
+package com.santhoshparamasivam.campusfind_admin_backend.service;
 
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreCollections;
-import com.santhoshparamasivam.campusfind_admin_backend.FirestoreRepository;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionAdmin;
-import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
+import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -26,6 +22,7 @@ public class FirestoreService {
         this.repository = repository;
     }
 
+    // Temporary code
     public void getUser(String name) throws ExecutionException, InterruptedException {
         List<QueryDocumentSnapshot> documents = this.repository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBERS,"name",name);
 
@@ -34,6 +31,7 @@ public class FirestoreService {
         logger.info(user.toString());
     }
 
+    // Temporary code
     public void updateData() throws ExecutionException, InterruptedException {
         HashMap<String, Object> documentData = new HashMap<>();
         documentData.put("name","Santhosh");
