@@ -54,4 +54,23 @@ public class InstitutionSchemaService {
 
         this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
     }
+
+//    public void updateMemberSchema(InstitutionMemberSchema institutionMemberSchema, ) throws ExecutionException, InterruptedException {
+//        InstitutionMemberSchema institutionMemberSchema = new InstitutionMemberSchema();
+//        Map<String, Map<String,String>> schema = new HashMap<>();
+//
+//        Map<String, String> professor = new HashMap<>();
+//        professor.put("Faculty Id","string");
+//        Map<String, String> student = new HashMap<>();
+//        student.put("Register Id","string");
+//
+//        schema.put("Professor",professor);
+//        schema.put("Student",student);
+//
+//        institutionMemberSchema.setInstitutionId("");
+//        institutionMemberSchema.setSchema(schema);
+//
+//        this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
+//    }
+
 }

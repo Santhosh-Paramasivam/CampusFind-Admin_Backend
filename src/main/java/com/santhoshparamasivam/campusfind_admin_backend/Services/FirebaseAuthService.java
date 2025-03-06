@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.santhoshparamasivam.campusfind_admin_backend.ServerException;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +22,29 @@ public class FirebaseAuthService {
 
     private final FirebaseAuth firebaseAuth;
     private final AdminService adminService;
+    private final Logger logger = LoggerFactory.getLogger(FirebaseAuthService.class);
     FirebaseAuthService(FirebaseAuth firebaseAuth, FirestoreService firestoreService, AdminService adminService) {
         this.firebaseAuth = firebaseAuth;
         this.adminService = adminService;
     }
 
     public String createUser(String email, String password) throws FirebaseAuthException {
-        System.out.printf("email : " + email);
-        System.out.printf("password : " + password);
+        logger.info("User create attempt email : " + email);
 
-        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail(email)
-                .setPassword(password);
+        try {
+            UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                    .setEmail(email)
+                    .setPassword(password);
 
-        UserRecord userRecord = firebaseAuth.createUser(request);
-        System.out.println("Successfully created new user: " + userRecord.getUid());
+            UserRecord userRecord = firebaseAuth.createUser(request);
+            logger.info("Successfully created new user: " + userRecord.getUid());
 
-        return userRecord.getUid();
+            return userRecord.getUid();
+        }
+        catch (FirebaseAuthException e) {
+            logger.error("Invalid ID token: " + e.getMessage());
+            return null;
+        }
     }
 
     public String extractAndVerifyIdToken(String authHeader) {
@@ -67,31 +75,4 @@ public class FirebaseAuthService {
             return null;
         }
     }
-
-    public ResponseEntity<Map<String, Object>> registerAdmin(String email, String username, String password) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            String uid = createUser(email, password);
-            if (uid == null) {
-                throw new ServerException("firebase-auth-error", "Email or Password is malformed", HttpStatus.BAD_REQUEST);
-            }
-
-            adminService.addInstitutionAdmins(uid, null, email, username);
-
-            response.put("message", "User registered successfully");
-            response.put("uid", uid);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        }
-        catch(FirebaseAuthException e){
-            throw new ServerException("firebase-auth",e.getMessage(),e.getHttpResponse().getStatusCode());
-        }
-        catch (ExecutionException | InterruptedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                    "error", "firebase-auth-error",
-                    "message", e.getMessage()
-            ));
-        }
-    }
-
 }

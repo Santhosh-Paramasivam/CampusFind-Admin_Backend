@@ -3,7 +3,6 @@ package com.santhoshparamasivam.campusfind_admin_backend;
 
 import org.springframework.http.HttpStatus;
 
-
 public class ServerException extends RuntimeException {
     private final HttpStatus status;
     private final String errorCode;

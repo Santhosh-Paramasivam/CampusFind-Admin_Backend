@@ -4,6 +4,7 @@ import com.santhoshparamasivam.campusfind_admin_backend.Services.*;
 import com.santhoshparamasivam.campusfind_admin_backend.Models.InstitutionMemberSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,11 @@ public class Controller {
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
     private final FirebaseAuthService firebaseAuthService;
     private final InstitutionSchemaService institutionMemberSchemaService;
-    Controller(FirestoreService firestoreService, FirebaseAuthService firebaseAuthService, InstitutionService institutionService, AdminService adminService, InstitutionSchemaService institutionMemberSchemaService) {
+    private final AdminService adminService;
+    Controller(FirebaseAuthService firebaseAuthService, InstitutionService institutionService, AdminService adminService, InstitutionSchemaService institutionMemberSchemaService) {
         this.firebaseAuthService = firebaseAuthService;
         this.institutionService = institutionService;
+        this.adminService = adminService;
         this.institutionMemberSchemaService = institutionMemberSchemaService;
     }
 
@@ -51,7 +54,7 @@ public class Controller {
             @RequestParam String username,
             @RequestParam String password) {
 
-        return firebaseAuthService.registerAdmin(email, username, password);
+        return adminService.registerAdmin(email, username, password);
     }
 
     @PostMapping("/register_institution")

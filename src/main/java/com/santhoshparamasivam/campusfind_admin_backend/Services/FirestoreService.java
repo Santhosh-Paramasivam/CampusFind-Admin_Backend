@@ -26,6 +26,7 @@ public class FirestoreService {
         this.repository = repository;
     }
 
+    // Temporary code
     public void getUser(String name) throws ExecutionException, InterruptedException {
         List<QueryDocumentSnapshot> documents = this.repository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBERS,"name",name);
 
@@ -34,6 +35,7 @@ public class FirestoreService {
         logger.info(user.toString());
     }
 
+    // Temporary code
     public void updateData() throws ExecutionException, InterruptedException {
         HashMap<String, Object> documentData = new HashMap<>();
         documentData.put("name","Santhosh");
