@@ -38,7 +38,7 @@ public class AdminService {
         return documentSnapshot.getString("institution_id");
     }
 
-    public ResponseEntity<Map<String, Object>> registerAdmin(String email, String username, String password) {
+    public ResponseEntity<Map<String, Object>> registerAdmin(String email, String username, String password) throws ExecutionException, InterruptedException{
         HashMap<String, Object> response = new HashMap<>();
 
         try {
@@ -55,9 +55,6 @@ public class AdminService {
         }
         catch(FirebaseAuthException e){
             throw new ServerException(ServerErrorCodes.FIREBASE_AUTH_ERROR,e.getMessage(),e.getHttpResponse().getStatusCode());
-        }
-        catch (ExecutionException | InterruptedException e) {
-            throw new ServerException(ServerErrorCodes.INTERNAL_SERVER_ERROR,ServerErrorCodes.ERROR_MAP.get(ServerErrorCodes.INTERNAL_SERVER_ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

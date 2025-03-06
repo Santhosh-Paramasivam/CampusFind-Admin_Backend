@@ -4,8 +4,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.santhoshparamasivam.campusfind_admin_backend.ServerErrorCodes;
 import com.santhoshparamasivam.campusfind_admin_backend.ServerException;
 import com.santhoshparamasivam.campusfind_admin_backend.Services.FirestoreService;
+import io.grpc.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -29,7 +31,7 @@ public class FirebaseAuthService {
     }
 
     public String createUser(String email, String password) throws FirebaseAuthException {
-        logger.info("User create attempt email : " + email);
+        logger.info("Attempt to create user, email : " + email);
 
         try {
             UserRecord.CreateRequest request = new UserRecord.CreateRequest()
@@ -42,26 +44,23 @@ public class FirebaseAuthService {
             return userRecord.getUid();
         }
         catch (FirebaseAuthException e) {
-            logger.error("Invalid ID token: " + e.getMessage());
-            return null;
+            logger.error("User not created" + e.getMessage());
+
+            throw new ServerException(ServerErrorCodes.FIREBASE_AUTH_ERROR,e.getMessage(),e.getHttpResponse().getStatusCode());
         }
     }
 
     public String extractAndVerifyIdToken(String authHeader) {
         String uid;
-        try {
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new ServerException("auth-token-missing","JWT token for authentication not found in request header", HttpStatus.UNAUTHORIZED);
+            throw new ServerException(ServerErrorCodes.AUTH_TOKEN_MISSING,ServerErrorCodes.ERROR_MAP.get(ServerErrorCodes.AUTH_TOKEN_MISSING), HttpStatus.UNAUTHORIZED);
         }
 
         String token = authHeader.substring(7);
         uid = verifyIdToken(token);
 
         return uid;
-    } catch (Exception e) {
-            //To be improved
-            throw new ServerException("generic error","generic message", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     public String verifyIdToken(String idToken) {
@@ -73,7 +72,8 @@ public class FirebaseAuthService {
             return uid;
         } catch (FirebaseAuthException e) {
             logger.error("Invalid ID token: " + e.getMessage());
-            return null;
+
+            throw new ServerException(ServerErrorCodes.INVALID_JWT_TOKEN, ServerErrorCodes.ERROR_MAP.get(ServerErrorCodes.INVALID_JWT_TOKEN),HttpStatus.UNAUTHORIZED);
         }
     }
 }

@@ -52,7 +52,7 @@ public class Controller {
     public ResponseEntity<Map<String, Object>> registerUser(
             @RequestParam String email,
             @RequestParam String username,
-            @RequestParam String password) {
+            @RequestParam String password) throws ExecutionException, InterruptedException {
 
         return adminService.registerAdmin(email, username, password);
     }
