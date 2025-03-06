@@ -68,10 +68,10 @@ public class FirebaseAuthService {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
             String uid = decodedToken.getUid();
-            System.out.println("✅ Verified user UID: " + uid);
+            logger.info("Verified user UID: " + uid);
             return uid;
         } catch (FirebaseAuthException e) {
-            System.err.println("❌ Invalid ID token: " + e.getMessage());
+            logger.error("❌ Invalid ID token: " + e.getMessage());
             return null;
         }
     }
