@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -25,25 +26,6 @@ public class Controller {
         this.institutionService = institutionService;
         this.adminService = adminService;
         this.institutionMemberSchemaService = institutionMemberSchemaService;
-    }
-
-    @GetMapping("/hello")
-    public String sayHello()
-    {
-        logger.info("info");
-        logger.debug("debug");
-        logger.warn("warn");
-        return "Hello";
-    }
-
-    @PostMapping("/protected")
-    public String protectedEndpoint(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        return "User logged in" + firebaseAuthService.extractAndVerifyIdToken(authHeader);
-    }
-
-    @PostMapping("/schema")
-    public void addSchema() throws ExecutionException, InterruptedException {
-        institutionMemberSchemaService.addMemberSchema();
     }
 
     @PostMapping("/register_admin")

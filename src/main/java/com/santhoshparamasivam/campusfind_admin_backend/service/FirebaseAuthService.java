@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 public class FirebaseAuthService {
 
     private final FirebaseAuth firebaseAuth;
-    private final AdminService adminService;
     private final Logger logger = LoggerFactory.getLogger(FirebaseAuthService.class);
-    FirebaseAuthService(FirebaseAuth firebaseAuth, FirestoreService firestoreService, AdminService adminService) {
+    FirebaseAuthService(FirebaseAuth firebaseAuth) {
         this.firebaseAuth = firebaseAuth;
-        this.adminService = adminService;
     }
 
     public String createUser(String email, String password) throws FirebaseAuthException {
