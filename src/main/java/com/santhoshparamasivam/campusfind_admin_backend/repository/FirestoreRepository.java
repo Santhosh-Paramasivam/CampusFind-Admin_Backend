@@ -24,9 +24,14 @@ public class FirestoreRepository {
 
     public List<QueryDocumentSnapshot> getDocumentsWhere(String collectionId, String field, String value) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = firestore.collection(collectionId).whereEqualTo(field,value).get();
+
+        return future.get().getDocuments();
+    }
+    public QueryDocumentSnapshot getDocumentWhere(String collectionId, String field, String value) throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> future = firestore.collection(collectionId).whereEqualTo(field,value).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
-        return documents;
+        return documents.get(0);
     }
 
     public void updateDocumentFromHashMap(String collectionName, String documentId, Map<String, Object> docData) throws ExecutionException, InterruptedException {

@@ -37,40 +37,13 @@ public class InstitutionSchemaService {
         return institutionMemberSchema;
     }
 
-    public void addMemberSchema() throws ExecutionException, InterruptedException {
-        InstitutionMemberSchema institutionMemberSchema = new InstitutionMemberSchema();
-        Map<String, Map<String,String>> schema = new HashMap<>();
-
-        Map<String, String> professor = new HashMap<>();
-        professor.put("Faculty Id","string");
-        Map<String, String> student = new HashMap<>();
-        student.put("Register Id","string");
-
-        schema.put("Professor",professor);
-        schema.put("Student",student);
-
-        institutionMemberSchema.setInstitutionId("");
-        institutionMemberSchema.setSchema(schema);
-
+    public void createMemberSchema(InstitutionMemberSchema institutionMemberSchema) throws ExecutionException, InterruptedException {
         this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
     }
 
-//    public void updateMemberSchema(InstitutionMemberSchema institutionMemberSchema, ) throws ExecutionException, InterruptedException {
-//        InstitutionMemberSchema institutionMemberSchema = new InstitutionMemberSchema();
-//        Map<String, Map<String,String>> schema = new HashMap<>();
-//
-//        Map<String, String> professor = new HashMap<>();
-//        professor.put("Faculty Id","string");
-//        Map<String, String> student = new HashMap<>();
-//        student.put("Register Id","string");
-//
-//        schema.put("Professor",professor);
-//        schema.put("Student",student);
-//
-//        institutionMemberSchema.setInstitutionId("");
-//        institutionMemberSchema.setSchema(schema);
-//
-//        this.firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, institutionMemberSchema);
-//    }
+    public void updateMemberSchema(InstitutionMemberSchema institutionMemberSchema) throws ExecutionException, InterruptedException {
+        QueryDocumentSnapshot queryDocumentSnapshot = firestoreRepository.getDocumentWhere(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, "institution_id", institutionMemberSchema.getInstitutionId());
 
+        this.firestoreRepository.createDocumentFromObjectAndDocumentId(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, queryDocumentSnapshot.getId(),institutionMemberSchema);
+    }
 }

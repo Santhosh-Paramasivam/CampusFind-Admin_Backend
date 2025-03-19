@@ -10,9 +10,14 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class InstitutionService {
     private final FirestoreRepository firestoreRepository;
+    private final FirebaseAuthService firebaseAuthService;
+    private final AdminService adminService;
 
-    public InstitutionService(FirestoreRepository firestoreRepository){
+    public InstitutionService(FirestoreRepository firestoreRepository, FirebaseAuthService firebaseAuthService, AdminService adminService){
         this.firestoreRepository = firestoreRepository;
+        this.firebaseAuthService = firebaseAuthService;
+        this.adminService = adminService;
+
     };
 
 
@@ -22,5 +27,11 @@ public class InstitutionService {
         String institutionDocId = firestoreRepository.createDocumentFromObject(FirestoreCollections.INSTITUTIONS, institution);
 
         firestoreRepository.updateDocumentFromField(FirestoreCollections.INSTITUTION_ADMINS,adminUid,"institution_id",institutionDocId);
+    }
+
+    public String getInstitutionIdFromAuthToken(String authToken) throws ExecutionException, InterruptedException {
+        String adminUid = firebaseAuthService.extractAndVerifyIdToken(authToken);
+
+        return adminService.getInstitutionIdFromAdminUid(adminUid);
     }
 }

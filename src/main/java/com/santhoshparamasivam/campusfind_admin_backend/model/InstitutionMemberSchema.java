@@ -15,6 +15,10 @@ public class InstitutionMemberSchema {
     private Map<String,Map<String,String>> schema;
 
     public InstitutionMemberSchema(){}
+    public InstitutionMemberSchema(Map<String, Map<String,String>> schema, String institutionId){
+        this.schema = schema;
+        this.institutionId = institutionId;
+    }
 
     public void setId(String id) {
         this.id = id;
