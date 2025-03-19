@@ -28,21 +28,7 @@ public class Controller {
         this.institutionMemberSchemaService = institutionMemberSchemaService;
     }
 
-    @GetMapping("/hello")
-    public String sayHello()
-    {
-        logger.info("info");
-        logger.debug("debug");
-        logger.warn("warn");
-        return "Hello";
-    }
-
-    @PostMapping("/protected")
-    public String protectedEndpoint(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        return "User logged in" + firebaseAuthService.extractAndVerifyIdToken(authHeader);
-    }
-
-        @PostMapping("/register_admin")
+    @PostMapping("/register_admin")
     public ResponseEntity<Map<String, Object>> registerUser(
             @RequestParam String email,
             @RequestParam String username,
