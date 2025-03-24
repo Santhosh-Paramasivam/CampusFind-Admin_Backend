@@ -26,7 +26,11 @@ public class InstitutionSchemaService {
     public InstitutionMemberSchema getMemberSchemaFromAdminUid(String uid) throws ExecutionException, InterruptedException {
         String institutionId = adminService.getInstitutionIdFromAdminUid(uid);
 
-        List<QueryDocumentSnapshot> queryDocumentSnapshotList = firestoreRepository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, "institution_id", "12345");
+        return getMemberSchemaFromInstitutionId(institutionId);
+    }
+
+    public InstitutionMemberSchema getMemberSchemaFromInstitutionId(String institutionId) throws ExecutionException, InterruptedException {
+        List<QueryDocumentSnapshot> queryDocumentSnapshotList = firestoreRepository.getDocumentsWhere(FirestoreCollections.INSTITUTION_MEMBER_SCHEMAS, "institution_id", institutionId);
 
         QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshotList.get(0);
 
