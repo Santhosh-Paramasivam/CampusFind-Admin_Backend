@@ -1,8 +1,11 @@
 package com.santhoshparamasivam.campusfind_admin_backend.service;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.santhoshparamasivam.campusfind_admin_backend.model.InstitutionAdmin;
 import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
 import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepository;
 import com.santhoshparamasivam.campusfind_admin_backend.model.Institution;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.ValidationConstants;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -33,5 +36,13 @@ public class InstitutionService {
         String adminUid = firebaseAuthService.extractAndVerifyIdToken(authToken);
 
         return adminService.getInstitutionIdFromAdminUid(adminUid);
+    }
+
+    public boolean getInstitutionConfigurationStatus(String uid) throws ExecutionException, InterruptedException {
+        DocumentSnapshot adminDocument = firestoreRepository.queryByDocumentId(FirestoreCollections.INSTITUTION_ADMINS,uid);
+
+        InstitutionAdmin admin = adminDocument.toObject(InstitutionAdmin.class);
+
+        return !admin.getInstitutionId().equals(ValidationConstants.ADMIN_INSTITUTION_REGISTERED);
     }
 }

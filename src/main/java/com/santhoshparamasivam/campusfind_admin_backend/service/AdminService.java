@@ -9,6 +9,7 @@ import com.santhoshparamasivam.campusfind_admin_backend.repository.FirestoreRepo
 import com.santhoshparamasivam.campusfind_admin_backend.utils.FirestoreCollections;
 import com.santhoshparamasivam.campusfind_admin_backend.utils.ServerResponse;
 import com.santhoshparamasivam.campusfind_admin_backend.utils.ServerResponseCodes;
+import com.santhoshparamasivam.campusfind_admin_backend.utils.ValidationConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class AdminService {
         firestoreRepository.updateDocumentFromField(FirestoreCollections.INSTITUTION_ADMINS, documentId, "institutionId", "");
     }
 
-    public void addInstitutionAdmins(String documentId, String institutionId, String emailId, String username) throws ExecutionException, InterruptedException {
-        InstitutionAdmin institutionAdmin = new InstitutionAdmin(documentId, emailId, institutionId, username);
+    public void addInstitutionAdmins(String documentId, String emailId, String username) throws ExecutionException, InterruptedException {
+        InstitutionAdmin institutionAdmin = new InstitutionAdmin(documentId, emailId, ValidationConstants.ADMIN_INSTITUTION_REGISTERED, username);
 
         firestoreRepository.createDocumentFromObjectAndDocumentId(FirestoreCollections.INSTITUTION_ADMINS, documentId, institutionAdmin);
     }
@@ -51,7 +52,7 @@ public class AdminService {
                 throw new ServerException(ServerErrorCodes.FIREBASE_AUTH_ERROR, "Email or Password is malformed", HttpStatus.BAD_REQUEST);
             }
 
-            addInstitutionAdmins(uid, null, email, username);
+            addInstitutionAdmins(uid, email, username);
 
             response.put("uid", uid);
 
